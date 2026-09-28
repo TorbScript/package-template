@@ -1,0 +1,4 @@
+name = "torb/hello"
+version = "0.1.0"
+description = "A tiny greeting library, kept small on purpose - fork this template to publish your own package"
+license = "MIT"

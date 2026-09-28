@@ -1,0 +1,4 @@
+// Run with: torb run examples/greet.trb
+use greeting from "../src/lib"
+
+print greeting("World")

@@ -1,0 +1,10 @@
+use test from "std/test"
+use greeting from "../src/lib"
+
+test "greets the name it is given" {
+  assert(greeting("World") == "Hello, World!")
+}
+
+test "greets a different name" {
+  assert(greeting("Ada") == "Hello, Ada!")
+}

@@ -1,0 +1,33 @@
+# Pushing a tag v* publishes this package to packages.torb.dev, through trusted publishing: no token is stored here.
+# enable-openid-connect lets this job ask this forge for a short-lived OpenID Connect token, which torb publish
+# exchanges for one that may publish this package for fifteen minutes - nothing else needs it and nothing else can
+# use it. This works only where the registry trusts this forge (git.torb.dev does, by default).
+#
+# This has to be configured once on the registry before the first tag: an owner of the package's registry account
+# adds a trusted publisher naming this repository as "<host>/<owner>/<name>", this workflow file and the tag ref -
+# see README.md, "Publishing". A Forgejo token names no environment, unlike GitHub's.
+name: publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    enable-openid-connect: true
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install torb
+        env:
+          TORB_INSTALL_CHANNEL: nightly # see ci.yml
+        run: |
+          curl -fsSL https://torb.dev/install.sh | sh
+          echo "$HOME/.torb/bin" >>"$GITHUB_PATH"
+
+      - run: torb publish

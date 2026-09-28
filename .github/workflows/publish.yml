@@ -1,0 +1,36 @@
+# Pushing a tag v* publishes this package to packages.torb.dev, through trusted publishing: no token is stored here.
+# id-token: write lets this job ask GitHub for a short-lived OpenID Connect token, which torb publish exchanges for
+# one that may publish this package for fifteen minutes - nothing else needs it and nothing else can use it.
+#
+# This has to be configured once on the registry before the first tag: an owner of the package's registry account
+# adds a trusted publisher naming this repository, this file, the tag ref and (optionally) the environment below -
+# see README.md, "Publishing".
+name: publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      id-token: write
+    # Delete this line, or change it to an environment you configured, if the trusted publisher you set up on the
+    # registry does not name one.
+    environment: release
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install torb
+        env:
+          TORB_INSTALL_CHANNEL: nightly # see ci.yml
+        run: |
+          curl -fsSL https://torb.dev/install.sh | sh
+          echo "$HOME/.torb/bin" >>"$GITHUB_PATH"
+
+      - run: torb publish

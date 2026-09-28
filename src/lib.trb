@@ -1,0 +1,16 @@
+/**
+ * `torb/hello`: a tiny greeting library, kept just large enough to show what a published package looks like - fork
+ * this template and grow it into your own.
+ */
+
+/**
+ * A friendly greeting for `name`.
+ *
+ * # Examples
+ *
+ *     print greeting("World")
+ *     // prints Hello, World!
+ */
+public fn greeting(name: String): String {
+  "Hello, {name}!"
+}

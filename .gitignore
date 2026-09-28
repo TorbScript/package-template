@@ -1,0 +1,2 @@
+# What `torb build` and `torb test --native` write: the generated C and the binaries.
+build/
