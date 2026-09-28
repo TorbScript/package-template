@@ -1,0 +1,23 @@
+/**
+ * `torb new --template package` and `torb init --template package` read this file statically, the way `project.trb`
+ * itself is read - nothing here is evaluated (docs/tooling/torb-new.md, "Writing a template").
+ */
+
+title = "Package"
+description = "a library to publish"
+name = "hello"
+
+replace {
+  file "project.trb" {
+    text "torb/hello", becomes: "owner/name"
+  }
+  file "README.md" {
+    text "torb/hello", becomes: "owner/name"
+  }
+}
+
+drop {
+  path ".github", unless: "ci", isAnyOf: "github,both"
+  path ".forgejo", unless: "ci", isAnyOf: "forgejo,both"
+  path "LICENSE", unless: "license", isAnyOf: "mit"
+}
